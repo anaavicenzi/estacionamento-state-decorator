@@ -27,9 +27,37 @@ Após iniciar a aplicação, acesse: [http://localhost:8080](http://localhost:80
 
 ### State
 
-Classes envolvidas: (a preencher)
+**Problema resolvido:** uma vaga pode assumir diferentes estados, e cada estado
+possui regras próprias para as operações de ocupar, liberar e reservar. O padrão
+State evita concentrar essas regras em condicionais `if/else` ou `switch` na
+classe `Vaga`, mantendo cada comportamento no estado correspondente. Assim,
+novos estados podem ser adicionados criando uma nova classe que implemente
+`EstadoVaga`, com alterações mínimas nas classes existentes.
 
-Problema resolvido: (a preencher)
+**Classes envolvidas:**
+
+- `Vaga`: contexto do padrão. Mantém a referência para o estado atual e delega
+  as operações de ocupar, liberar e reservar para esse estado.
+- `EstadoVaga`: estado abstrato representado por uma interface. Define o
+  contrato comum para as transições e para a identificação do estado.
+- `VagaLivre`: estado concreto de uma vaga disponível.
+- `VagaOcupada`: estado concreto de uma vaga atualmente ocupada.
+- `VagaReservada`: estado concreto de uma vaga reservada.
+- `TransicaoInvalidaException`: exceção lançada quando uma operação não é
+  permitida no estado atual.
+
+```mermaid
+stateDiagram-v2
+    [*] --> LIVRE
+
+    LIVRE --> OCUPADA: ocupar
+    LIVRE --> RESERVADA: reservar
+
+    OCUPADA --> LIVRE: liberar
+
+    RESERVADA --> OCUPADA: ocupar
+    RESERVADA --> LIVRE: liberar
+```
 
 ### Decorator
 
@@ -39,12 +67,14 @@ Problema resolvido: (a preencher)
 
 ## Declaração de uso de IA
 
-Modelo usado: (a preencher)
+Modelo usado: Codex, baseado no GPT-5.
 
-Partes em que foi utilizada: (a preencher)
+Partes em que foi utilizada: apoio à criação do esqueleto inicial do projeto,
+implementação do padrão State, testes e documentação.
 
 ## Contribuição de cada integrante
 
 | Integrante | GitHub | Contribuição |
 | --- | --- | --- |
+| Ana Laura | [anaavicenzi](https://github.com/anaavicenzi) | Implementação do padrão State (estados da Vaga e testes). |
 | (a preencher) | (a preencher) | (a preencher) |
