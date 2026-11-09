@@ -61,9 +61,63 @@ stateDiagram-v2
 
 ### Decorator
 
-Classes envolvidas: (a preencher)
+**Problema resolvido:** durante a permanência, o cliente pode contratar serviços
+extras (lavagem, manobrista) em qualquer combinação e ordem. Criar uma subclasse
+para cada combinação (`TarifaComLavagem`, `TarifaComLavagemEManobrista`, ...)
+causaria uma explosão de classes, e usar flags booleanas com `if` em uma única
+classe obrigaria a alterá-la a cada novo serviço. Com o Decorator, cada extra é
+uma classe pequena que "embrulha" outro `Servico` e acrescenta sua descrição e
+seu custo. As combinações são montadas em tempo de execução, e um novo serviço
+(por exemplo, `RecargaEletrica`) exige apenas uma nova subclasse de
+`ServicoDecorator`, sem alterar as classes existentes.
 
-Problema resolvido: (a preencher)
+**Classes envolvidas:**
+
+- `Servico`: componente (interface). Define `descricao()` e `custo()`.
+- `TarifaBase`: componente concreto. Cobra valor por hora × horas
+  (R$ 10,00/h).
+- `ServicoDecorator`: decorator abstrato. Implementa `Servico` e guarda uma
+  referência ao `Servico` decorado, repassando as chamadas a ele.
+- `Lavagem`: decorator concreto, acrescenta R$ 30,00.
+- `Manobrista`: decorator concreto, acrescenta R$ 20,00.
+
+```mermaid
+classDiagram
+    class Servico {
+        <<interface>>
+        +descricao() String
+        +custo() double
+    }
+    class TarifaBase {
+        -int horas
+        +descricao() String
+        +custo() double
+    }
+    class ServicoDecorator {
+        <<abstract>>
+        #Servico servico
+        +descricao() String
+        +custo() double
+    }
+    Servico <|.. TarifaBase
+    Servico <|.. ServicoDecorator
+    ServicoDecorator o--> Servico : decora
+    ServicoDecorator <|-- Lavagem
+    ServicoDecorator <|-- Manobrista
+```
+
+**Exemplo de composição:**
+
+```java
+Servico servico = new Manobrista(new Lavagem(new TarifaBase(2)));
+
+servico.descricao(); // "Tarifa 2h + Lavagem + Manobrista"
+servico.custo();     // 20.0 + 30.0 + 20.0 = 70.0
+```
+
+Cada chamada percorre a cadeia de fora para dentro: `Manobrista` pede a
+descrição/custo à `Lavagem`, que pede à `TarifaBase`; na volta, cada camada
+soma a sua parte.
 
 ## Declaração de uso de IA
 
