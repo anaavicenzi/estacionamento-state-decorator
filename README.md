@@ -121,14 +121,15 @@ soma a sua parte.
 
 ## Declaração de uso de IA
 
-Modelo usado: Codex, baseado no GPT-5.
-
-Partes em que foi utilizada: apoio à criação do esqueleto inicial do projeto,
-implementação do padrão State, testes e documentação.
+| Parte | Modelo | Onde foi utilizada |
+| --- | --- | --- |
+| Setup e State | Codex, baseado no GPT-5 | Apoio à criação do esqueleto inicial do projeto, implementação do padrão State, testes e documentação. |
+| Decorator | Claude Opus 5.5 (Anthropic) | Implementação das classes do pacote `servico` (`TarifaBase`, `ServicoDecorator`, `Lavagem`, `Manobrista`), testes unitários e seção Decorator deste README. Código revisado e testado pelo integrante responsável. |
 
 ## Contribuição de cada integrante
 
 | Integrante | GitHub | Contribuição |
 | --- | --- | --- |
 | Ana Laura | [anaavicenzi](https://github.com/anaavicenzi) | Implementação do padrão State (estados da Vaga e testes). |
+| Octavio | [octaviodemos](https://github.com/octaviodemos) | Implementação do padrão Decorator (serviços extras Lavagem e Manobrista, tarifa base e testes) e seção Decorator do README. |
 | (a preencher) | (a preencher) | (a preencher) |
