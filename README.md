@@ -6,9 +6,9 @@
 
 ## Tecnologias e pré-requisitos
 
-- JDK 17
+- JDK 21
 - Maven 3.9+
-- Java 17
+- Java 21
 - Spring Boot 3.3.5
 
 ## Como executar
