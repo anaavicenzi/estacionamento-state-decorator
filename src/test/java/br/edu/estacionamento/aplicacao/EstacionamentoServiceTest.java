@@ -81,11 +81,11 @@ class EstacionamentoServiceTest {
 
     @Test
     void naoDeveOcuparVagaJaOcupada() {
-        Vaga vaga = service.criarVaga(2);
-        service.registrarEntrada("ABC1D23", "Gol", vaga.getId());
+        Long vagaId = service.criarVaga(2).getId();
+        service.registrarEntrada("ABC1D23", "Gol", vagaId);
 
         assertThrows(TransicaoInvalidaException.class,
-                () -> service.registrarEntrada("XYZ9K87", "Uno", vaga.getId()));
+                () -> service.registrarEntrada("XYZ9K87", "Uno", vagaId));
         assertEquals(1, service.listarPermanencias().size());
     }
 
@@ -93,19 +93,21 @@ class EstacionamentoServiceTest {
     void naoDevePermitirMesmoVeiculoEmDuasVagas() {
         Vaga v1 = service.criarVaga(1);
         Vaga v2 = service.criarVaga(2);
+        Long v2Id = v2.getId();
         service.registrarEntrada("ABC1D23", "Gol", v1.getId());
 
         assertThrows(RegraNegocioException.class,
-                () -> service.registrarEntrada("abc1d23", "Gol", v2.getId()));
+                () -> service.registrarEntrada("abc1d23", "Gol", v2Id));
         assertEquals("LIVRE", v2.getNomeEstado());
     }
 
     @Test
     void naoDeveLiberarManualmenteVagaComPermanenciaAtiva() {
         Vaga vaga = service.criarVaga(1);
-        service.registrarEntrada("ABC1D23", "Gol", vaga.getId());
+        Long vagaId = vaga.getId();
+        service.registrarEntrada("ABC1D23", "Gol", vagaId);
 
-        assertThrows(RegraNegocioException.class, () -> service.liberarVaga(vaga.getId()));
+        assertThrows(RegraNegocioException.class, () -> service.liberarVaga(vagaId));
         assertEquals("OCUPADA", vaga.getNomeEstado());
     }
 
@@ -139,20 +141,20 @@ class EstacionamentoServiceTest {
     @Test
     void naoDeveAdicionarServicoDuplicadoOuInvalido() {
         Vaga vaga = service.criarVaga(1);
-        Permanencia p = service.registrarEntrada("ABC1D23", "Gol", vaga.getId());
-        service.adicionarServico(p.getId(), "LAVAGEM");
+        Long id = service.registrarEntrada("ABC1D23", "Gol", vaga.getId()).getId();
+        service.adicionarServico(id, "LAVAGEM");
 
-        assertThrows(RegraNegocioException.class, () -> service.adicionarServico(p.getId(), "LAVAGEM"));
-        assertThrows(IllegalArgumentException.class, () -> service.adicionarServico(p.getId(), "XPTO"));
+        assertThrows(RegraNegocioException.class, () -> service.adicionarServico(id, "LAVAGEM"));
+        assertThrows(IllegalArgumentException.class, () -> service.adicionarServico(id, "XPTO"));
         assertThrows(RecursoNaoEncontradoException.class, () -> service.adicionarServico(99L, "LAVAGEM"));
     }
 
     @Test
     void naoDeveRegistrarSaidaDuasVezes() {
         Vaga vaga = service.criarVaga(1);
-        Permanencia p = service.registrarEntrada("ABC1D23", "Gol", vaga.getId());
-        service.registrarSaida(p.getId());
+        Long id = service.registrarEntrada("ABC1D23", "Gol", vaga.getId()).getId();
+        service.registrarSaida(id);
 
-        assertThrows(RegraNegocioException.class, () -> service.registrarSaida(p.getId()));
+        assertThrows(RegraNegocioException.class, () -> service.registrarSaida(id));
     }
 }
