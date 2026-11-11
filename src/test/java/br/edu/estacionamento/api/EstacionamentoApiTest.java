@@ -66,14 +66,14 @@ class EstacionamentoApiTest {
                 .andExpect(jsonPath("$.servicos[0]").value("LAVAGEM"));
         postJson("/api/permanencias/1/servicos", "{\"tipo\": \"MANOBRISTA\"}")
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.descricao").value("Tarifa 0h + Lavagem + Manobrista"));
+                .andExpect(jsonPath("$.descricao").value("Tarifa 1h + Lavagem + Manobrista"));
 
         // 6. Saída: tarifa + extras somados, vaga volta a Livre
         mvc.perform(post("/api/permanencias/1/saida"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ativa").value(false))
                 .andExpect(jsonPath("$.saida").isNotEmpty())
-                .andExpect(jsonPath("$.valorTotal").value(50.0));
+                .andExpect(jsonPath("$.valorTotal").value(60.0));
 
         mvc.perform(get("/api/vagas"))
                 .andExpect(status().isOk())

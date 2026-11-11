@@ -74,10 +74,17 @@ public class Permanencia {
         return cadeia;
     }
 
-    /** Horas completas de permanência (frações de hora não são cobradas). */
+    /**
+     * Horas cobradas: qualquer fração de hora conta como hora cheia, com
+     * mínimo de 1h (ex.: 5min → 1h, 1h00 → 1h, 1h01 → 2h).
+     */
     private int horasAte(LocalDateTime momento) {
-        long horas = Duration.between(entrada, momento).toHours();
-        return (int) Math.max(0, horas);
+        Duration permanencia = Duration.between(entrada, momento);
+        long horas = permanencia.toHours();
+        if (!permanencia.minusHours(horas).isZero()) {
+            horas++;
+        }
+        return (int) Math.max(1, horas);
     }
 
     public boolean isFinalizada() {

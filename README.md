@@ -84,7 +84,7 @@ curl -X POST http://localhost:8080/api/permanencias -H "Content-Type: applicatio
 ```json
 {"id":1,"vagaId":2,"vagaNumero":2,"placa":"ABC1D23","modelo":"Gol",
  "entrada":"2026-11-10T14:00:00","saida":null,"ativa":true,"servicos":[],
- "descricao":"Tarifa 0h","valorAtual":0.0,"valorTotal":null}
+ "descricao":"Tarifa 1h","valorAtual":10.0,"valorTotal":null}
 ```
 
 **4. Tentar ocupar a vaga 2 de novo (erro de transição)**
@@ -108,7 +108,7 @@ curl -X POST http://localhost:8080/api/permanencias/1/servicos -H "Content-Type:
 
 ```json
 {"id":1, "...":"...", "servicos":["LAVAGEM","MANOBRISTA"],
- "descricao":"Tarifa 0h + Lavagem + Manobrista","valorAtual":50.0,"valorTotal":null}
+ "descricao":"Tarifa 1h + Lavagem + Manobrista","valorAtual":60.0,"valorTotal":null}
 ```
 
 Adicionar o mesmo serviço duas vezes retorna `409`.
@@ -122,12 +122,12 @@ curl -X POST http://localhost:8080/api/permanencias/1/saida
 ```json
 {"id":1,"vagaId":2,"vagaNumero":2,"placa":"ABC1D23","modelo":"Gol",
  "entrada":"2026-11-10T14:00:00","saida":"2026-11-10T16:30:00","ativa":false,
- "servicos":["LAVAGEM","MANOBRISTA"],"descricao":"Tarifa 2h + Lavagem + Manobrista",
- "valorAtual":70.0,"valorTotal":70.0}
+ "servicos":["LAVAGEM","MANOBRISTA"],"descricao":"Tarifa 3h + Lavagem + Manobrista",
+ "valorAtual":80.0,"valorTotal":80.0}
 ```
 
-A tarifa base cobra R$ 10,00 por hora completa de permanência (no exemplo,
-2h30 → 2h). Enquanto a permanência está ativa, `valorTotal` é `null` e
+A tarifa base cobra R$ 10,00 por hora; fração de hora é cobrada como hora
+cheia, com mínimo de 1h (no exemplo, 2h30 → 3h; 58 min → 1h). Enquanto a permanência está ativa, `valorTotal` é `null` e
 `valorAtual` mostra a cobrança parcial até o momento.
 
 **7. Consultar vagas e permanências**

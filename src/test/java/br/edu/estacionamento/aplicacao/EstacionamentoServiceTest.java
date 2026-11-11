@@ -119,8 +119,8 @@ class EstacionamentoServiceTest {
 
         service.registrarSaida(p.getId());
 
-        assertEquals("Tarifa 2h + Lavagem + Manobrista", p.getServico().descricao());
-        assertEquals(70.0, p.getValorTotal());
+        assertEquals("Tarifa 3h + Lavagem + Manobrista", p.getServico().descricao());
+        assertEquals(30.0 + 30.0 + 20.0, p.getValorTotal());
         assertEquals("LIVRE", vaga.getNomeEstado());
     }
 

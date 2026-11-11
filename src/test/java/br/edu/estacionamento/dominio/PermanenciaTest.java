@@ -58,8 +58,26 @@ class PermanenciaTest {
     }
 
     @Test
-    void deveCobrarSomenteHorasCompletas() {
-        permanencia.finalizar(ENTRADA.plusMinutes(119));
+    void deveArredondarFracaoDeHoraParaCima() {
+        permanencia.finalizar(ENTRADA.plusMinutes(61));
+
+        assertEquals("Tarifa 2h", permanencia.getServico().descricao());
+        assertEquals(20.0, permanencia.getValorTotal());
+    }
+
+    @Test
+    void naoDeveArredondarHoraExata() {
+        permanencia.finalizar(ENTRADA.plusMinutes(60));
+
+        assertEquals("Tarifa 1h", permanencia.getServico().descricao());
+    }
+
+    @Test
+    void deveCobrarNoMinimoUmaHora() {
+        assertEquals("Tarifa 1h", permanencia.servicoAte(ENTRADA).descricao());
+        assertEquals("Tarifa 1h", permanencia.servicoAte(ENTRADA.plusSeconds(1)).descricao());
+
+        permanencia.finalizar(ENTRADA.plusMinutes(58));
 
         assertEquals("Tarifa 1h", permanencia.getServico().descricao());
         assertEquals(10.0, permanencia.getValorTotal());
