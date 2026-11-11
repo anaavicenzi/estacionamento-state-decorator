@@ -1,6 +1,6 @@
 package br.edu.estacionamento.aplicacao;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -22,7 +22,7 @@ public class PermanenciaRepository {
     private final Map<Long, Permanencia> permanencias = new ConcurrentHashMap<>();
     private final AtomicLong sequencia = new AtomicLong();
 
-    public Permanencia criar(Vaga vaga, Veiculo veiculo, LocalDateTime entrada) {
+    public Permanencia criar(Vaga vaga, Veiculo veiculo, OffsetDateTime entrada) {
         Permanencia permanencia = new Permanencia(sequencia.incrementAndGet(), vaga, veiculo, entrada);
         permanencias.put(permanencia.getId(), permanencia);
         return permanencia;

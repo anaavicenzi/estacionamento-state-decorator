@@ -83,7 +83,7 @@ curl -X POST http://localhost:8080/api/permanencias -H "Content-Type: applicatio
 
 ```json
 {"id":1,"vagaId":2,"vagaNumero":2,"placa":"ABC1D23","modelo":"Gol",
- "entrada":"2026-11-10T14:00:00","saida":null,"ativa":true,"servicos":[],
+ "entrada":"2026-11-10T14:00:00-03:00","saida":null,"ativa":true,"servicos":[],
  "descricao":"Tarifa 1h","valorAtual":10.0,"valorTotal":null}
 ```
 
@@ -121,7 +121,7 @@ curl -X POST http://localhost:8080/api/permanencias/1/saida
 
 ```json
 {"id":1,"vagaId":2,"vagaNumero":2,"placa":"ABC1D23","modelo":"Gol",
- "entrada":"2026-11-10T14:00:00","saida":"2026-11-10T16:30:00","ativa":false,
+ "entrada":"2026-11-10T14:00:00-03:00","saida":"2026-11-10T16:30:00-03:00","ativa":false,
  "servicos":["LAVAGEM","MANOBRISTA"],"descricao":"Tarifa 3h + Lavagem + Manobrista",
  "valorAtual":80.0,"valorTotal":80.0}
 ```

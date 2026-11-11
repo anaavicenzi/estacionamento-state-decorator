@@ -1,6 +1,6 @@
 package br.edu.estacionamento.api;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class PermanenciaController {
 
     @GetMapping
     public List<PermanenciaResponse> listar() {
-        LocalDateTime agora = service.agora();
+        OffsetDateTime agora = service.agora();
         return service.listarPermanencias().stream()
                 .map(p -> PermanenciaResponse.de(p, agora))
                 .toList();

@@ -1,7 +1,7 @@
 package br.edu.estacionamento.aplicacao;
 
 import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -100,8 +100,8 @@ public class EstacionamentoService {
         return permanencia;
     }
 
-    public LocalDateTime agora() {
-        return LocalDateTime.now(relogio);
+    public OffsetDateTime agora() {
+        return OffsetDateTime.now(relogio);
     }
 
     private Vaga buscarVaga(Long id) {

@@ -1,6 +1,6 @@
 package br.edu.estacionamento.api.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import br.edu.estacionamento.dominio.Permanencia;
@@ -24,15 +24,15 @@ public record PermanenciaResponse(
         int vagaNumero,
         String placa,
         String modelo,
-        LocalDateTime entrada,
-        LocalDateTime saida,
+        OffsetDateTime entrada,
+        OffsetDateTime saida,
         boolean ativa,
         List<String> servicos,
         String descricao,
         double valorAtual,
         Double valorTotal) {
 
-    public static PermanenciaResponse de(Permanencia p, LocalDateTime agora) {
+    public static PermanenciaResponse de(Permanencia p, OffsetDateTime agora) {
         Servico servico = p.servicoAte(agora);
         return new PermanenciaResponse(
                 p.getId(),

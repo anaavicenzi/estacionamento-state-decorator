@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import br.edu.estacionamento.vaga.Vaga;
 
 class PermanenciaTest {
 
-    private static final LocalDateTime ENTRADA = LocalDateTime.of(2026, 11, 10, 8, 0);
+    private static final OffsetDateTime ENTRADA = OffsetDateTime.of(2026, 11, 10, 8, 0, 0, 0, ZoneOffset.ofHours(-3));
 
     private Vaga vaga;
     private Permanencia permanencia;
@@ -130,9 +131,9 @@ class PermanenciaTest {
     @Test
     void naoDevePermitirSaidaDuplicada() {
         permanencia.finalizar(ENTRADA.plusHours(1));
+        OffsetDateTime novaSaida = ENTRADA.plusHours(2);
 
-        assertThrows(RegraNegocioException.class,
-                () -> permanencia.finalizar(ENTRADA.plusHours(2)));
+        assertThrows(RegraNegocioException.class, () -> permanencia.finalizar(novaSaida));
         assertEquals(ENTRADA.plusHours(1), permanencia.getSaida());
     }
 

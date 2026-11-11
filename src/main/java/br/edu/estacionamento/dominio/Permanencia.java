@@ -1,7 +1,7 @@
 package br.edu.estacionamento.dominio;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,21 +16,21 @@ import br.edu.estacionamento.vaga.Vaga;
  * <p>Os extras são guardados na ordem em que foram pedidos. A cadeia de
  * decorators é montada a partir da {@link TarifaBase}, que depende do tempo de
  * permanência; por isso ela só fica fixa na saída. Enquanto a permanência está
- * ativa, {@link #servicoAte(LocalDateTime)} mostra a cobrança parcial.
+ * ativa, {@link #servicoAte(OffsetDateTime)} mostra a cobrança parcial.
  */
 public class Permanencia {
 
     private final Long id;
     private final Vaga vaga;
     private final Veiculo veiculo;
-    private final LocalDateTime entrada;
+    private final OffsetDateTime entrada;
     private final List<TipoServico> extras = new ArrayList<>();
 
-    private LocalDateTime saida;
+    private OffsetDateTime saida;
     private Servico servico;
     private Double valorTotal;
 
-    public Permanencia(Long id, Vaga vaga, Veiculo veiculo, LocalDateTime entrada) {
+    public Permanencia(Long id, Vaga vaga, Veiculo veiculo, OffsetDateTime entrada) {
         this.id = id;
         this.vaga = vaga;
         this.veiculo = veiculo;
@@ -48,7 +48,7 @@ public class Permanencia {
     }
 
     /** Registra a saída: fecha a cadeia de serviços, calcula o total e libera a vaga. */
-    public void finalizar(LocalDateTime momentoSaida) {
+    public void finalizar(OffsetDateTime momentoSaida) {
         if (isFinalizada()) {
             throw new RegraNegocioException("Permanência " + id + " já foi finalizada");
         }
@@ -63,7 +63,7 @@ public class Permanencia {
      * Monta a cadeia de decorators considerando a permanência até o momento
      * informado. Ex.: Manobrista(Lavagem(TarifaBase(2))).
      */
-    public Servico servicoAte(LocalDateTime momento) {
+    public Servico servicoAte(OffsetDateTime momento) {
         if (isFinalizada()) {
             return servico;
         }
@@ -78,7 +78,7 @@ public class Permanencia {
      * Horas cobradas: qualquer fração de hora conta como hora cheia, com
      * mínimo de 1h (ex.: 5min → 1h, 1h00 → 1h, 1h01 → 2h).
      */
-    private int horasAte(LocalDateTime momento) {
+    private int horasAte(OffsetDateTime momento) {
         Duration permanencia = Duration.between(entrada, momento);
         long horas = permanencia.toHours();
         if (!permanencia.minusHours(horas).isZero()) {
@@ -103,11 +103,11 @@ public class Permanencia {
         return veiculo;
     }
 
-    public LocalDateTime getEntrada() {
+    public OffsetDateTime getEntrada() {
         return entrada;
     }
 
-    public LocalDateTime getSaida() {
+    public OffsetDateTime getSaida() {
         return saida;
     }
 
