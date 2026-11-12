@@ -256,6 +256,7 @@ soma a sua parte.
 | Setup e State | Codex, baseado no GPT-5 | Apoio à criação do esqueleto inicial do projeto, implementação do padrão State, testes e documentação. |
 | Decorator | Claude Opus 5.5 (Anthropic) | Implementação das classes do pacote `servico` (`TarifaBase`, `ServicoDecorator`, `Lavagem`, `Manobrista`), testes unitários e seção Decorator deste README. Código revisado e testado pelo integrante responsável. |
 | Domínio, serviço e API | Claude Opus 5.5 (Anthropic) | Implementação dos pacotes `dominio` (`Veiculo`, `Permanencia`, `TipoServico`), `aplicacao` (`EstacionamentoService` e repositórios em memória) e `api` (controllers, DTOs e tratamento de erros), testes unitários e de integração e seção "Exemplos de uso" deste README. Código revisado e testado pelo integrante responsável. |
+| Frontend, integração e README | Claude Opus 5.5 (Anthropic) | Protótipo das telas e dos estados de erro, implementação do frontend em `static/` (`index.html`, `app.js`, `style.css`) consumindo a API com `fetch` e com dados mockados para uso sem o backend, teste de ponta a ponta do fluxo de demonstração e redação das seções finais deste README (descrição, pré-requisitos, declaração de IA e contribuições). Código revisado e testado pelo integrante responsável. |
 
 ## Contribuição de cada integrante
 
@@ -264,4 +265,4 @@ soma a sua parte.
 | Ana Laura | [anaavicenzi](https://github.com/anaavicenzi) | Implementação do padrão State (estados da Vaga e testes). |
 | Octavio | [octaviodemos](https://github.com/octaviodemos) | Implementação do padrão Decorator (serviços extras Lavagem e Manobrista, tarifa base e testes) e seção Decorator do README. |
 | Lucas | [LucasMagenis](https://github.com/LucasMagenis) | Domínio (`Veiculo`, `Permanencia`), `EstacionamentoService`, repositórios em memória, API REST (controllers, DTOs, tratamento de erros → HTTP 409), testes e seção "Exemplos de uso" do README. |
-| (a preencher) | (a preencher) | (a preencher) |
+| Bruno | [BrunoSupriano](https://github.com/BrunoSupriano) | Frontend (`index.html`, `app.js`, `style.css`): planta do pátio com estados coloridos, entrada, reservar/liberar, serviços extras, saída com confirmação e recibo, lista de permanências com filtros, tratamento de erros da API (409/404/400 e servidor fora do ar) e dados mockados. Integração do frontend com a API, teste de ponta a ponta do fluxo de demonstração.|
