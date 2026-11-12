@@ -4,8 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estacionamento</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <p>Frontend em construção</p>
+    <!-- Manchas de cor desfocadas atrás dos painéis de vidro -->
+    <div class="fundo" aria-hidden="true">
+        <span class="mancha mancha--azul"></span>
+        <span class="mancha mancha--violeta"></span>
+        <span class="mancha mancha--verde"></span>
+    </div>
+
+    <div class="app">
+        <header class="topo vidro">
+            <div class="marca">
+                <div class="marca__logo" aria-hidden="true">P</div>
+                <div>
+                    <h1>Estacionamento</h1>
+                    <span id="selo" class="selo"><span class="selo__ponto"></span><span id="selo-texto">Conectando…</span></span>
+                </div>
+            </div>
+
+            <div class="topo__espaco"></div>
+
+            <div id="semaforo" class="semaforo" role="status" aria-live="polite">
+                <div class="semaforo__luzes" aria-hidden="true">
+                    <span class="luz luz--vermelha"></span>
+                    <span class="luz luz--amarela"></span>
+                    <span class="luz luz--verde"></span>
+                </div>
+                <span class="semaforo__texto"><strong id="semaforo-numero">—</strong> vagas livres</span>
+            </div>
+
+            <button type="button" id="btn-precos" class="btn btn--fantasma" aria-haspopup="dialog">
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                Preços
+            </button>
+
+            <div class="atualizacao">
+                <span id="atualizado" class="atualizado" title="Os dados são recarregados sozinhos a cada 30 segundos">
+                    <span class="atualizado__ponto"></span><span id="atualizado-texto">Carregando…</span>
+                </span>
+                <button type="button" id="btn-atualizar" class="btn btn--vidro">
+                    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.6"/><path d="M20 4v7h-7"/></svg>
+                    Atualizar
+                </button>
+            </div>
+        </header>
+
+        <div id="banner-offline" class="banner-offline" role="alert" hidden>
+            <span class="banner-offline__icone" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 4.2-2.6"/><path d="M10.7 5.1A15 15 0 0 1 22 8.8"/><path d="M5 12.6a10 10 0 0 1 5.2-2.4"/><path d="M16.4 11.4A10 10 0 0 1 19 12.6"/><path d="M8.5 16.4a5 5 0 0 1 7 0"/><path d="M12 20h.01"/><path d="m2 2 20 20"/></svg>
+            </span>
+            <div class="banner-offline__texto">
+                <p class="banner-offline__titulo">Sem conexão com o servidor</p>
+                <p>Confira se a aplicação está rodando (mvn spring-boot:run). Os dados abaixo podem estar desatualizados.</p>
+            </div>
+            <button type="button" id="btn-reconectar" class="btn btn--perigo">Tentar de novo</button>
+        </div>
+
+        <main id="conteudo" class="conteudo">
+            <div class="linha-topo">
+                <aside id="painel" class="painel vidro" aria-live="polite" aria-label="Detalhes da vaga"></aside>
+
+                <section class="mapa vidro" aria-labelledby="t-mapa">
+                    <div class="mapa__cabecalho">
+                        <div class="mapa__titulo">
+                            <h2 id="t-mapa">Mapa do pátio</h2>
+                            <div id="contadores" class="contadores"></div>
+                        </div>
+                        <form id="form-vaga" class="form-vaga" novalidate>
+                            <label for="numero-vaga" class="sr-only">Número da nova vaga</label>
+                            <input type="number" id="numero-vaga" min="1" step="1" placeholder="Nº">
+                            <button type="submit" class="btn btn--vidro">
+                                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                                Nova vaga
+                            </button>
+                        </form>
+                    </div>
+                    <p id="erro-vaga" class="erro-campo" aria-live="polite"></p>
+                    <div id="planta" class="planta"></div>
+                    <p class="mapa__dica">Clique em uma vaga para ver detalhes e ações.</p>
+                </section>
+            </div>
+
+            <section class="permanencias vidro" aria-labelledby="t-perm">
+                <div class="permanencias__cabecalho">
+                    <div class="permanencias__titulo">
+                        <h2 id="t-perm">Permanências</h2>
+                        <span id="qtd-permanencias" class="texto-suave"></span>
+                    </div>
+                    <div class="filtros" role="group" aria-label="Filtrar permanências">
+                        <button type="button" class="filtro" data-filtro="todas" aria-pressed="true">Todas</button>
+                        <button type="button" class="filtro" data-filtro="ativas" aria-pressed="false">Ativas</button>
+                        <button type="button" class="filtro" data-filtro="finalizadas" aria-pressed="false">Finalizadas</button>
+                    </div>
+                </div>
+                <div id="permanencias" class="permanencias__lista" tabindex="0" aria-label="Lista de permanências"></div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="assertive" hidden></div>
+
+    <div id="modal-precos" class="modal" hidden>
+        <div class="modal__caixa" role="dialog" aria-modal="true" aria-labelledby="t-precos">
+            <div class="modal__cabecalho">
+                <span class="modal__icone modal__icone--azul" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                </span>
+                <h2 id="t-precos">Tabela de preços</h2>
+                <button type="button" class="btn-icone" data-fechar-modal aria-label="Fechar">
+                    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                </button>
+            </div>
+            <div id="lista-precos" class="precos"></div>
+            <p id="exemplo-preco" class="texto-suave"></p>
+            <button type="button" class="btn btn--vidro btn--largo" data-fechar-modal>Fechar</button>
+        </div>
+    </div>
+
+    <div id="modal-saida" class="modal" hidden>
+        <div class="modal__caixa" role="alertdialog" aria-modal="true" aria-labelledby="t-saida" aria-describedby="d-saida">
+            <div class="modal__cabecalho">
+                <span class="modal__icone modal__icone--vermelho" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
+                </span>
+                <h2 id="t-saida">Registrar saída?</h2>
+            </div>
+            <div id="resumo-saida"></div>
+            <p id="d-saida" class="texto-suave"></p>
+            <div class="modal__acoes">
+                <button type="button" class="btn btn--vidro btn--grande" data-fechar-modal>Cancelar</button>
+                <button type="button" id="btn-confirmar-saida" class="btn btn--perigo btn--grande">Confirmar saída</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
