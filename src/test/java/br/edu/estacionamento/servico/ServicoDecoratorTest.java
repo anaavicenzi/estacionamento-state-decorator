@@ -61,6 +61,22 @@ class ServicoDecoratorTest {
     }
 
     @Test
+    void comVagaCobertaSomaValorDaVagaCoberta() {
+        Servico servico = new VagaCoberta(new TarifaBase(2));
+
+        assertEquals("Tarifa 2h + Vaga Coberta", servico.descricao());
+        assertEquals(35.0, servico.custo(), DELTA);
+      }
+
+    @Test
+    void comLavagemEVagaCobertaSomaTudo() {
+        Servico servico = new VagaCoberta(new Lavagem(new TarifaBase(2)));
+
+        assertEquals("Tarifa 2h + Lavagem + Vaga Coberta", servico.descricao());
+        assertEquals(65.0, servico.custo(), DELTA);
+    }
+
+    @Test
     void tarifaBaseNaoAceitaHorasNegativas() {
         assertThrows(IllegalArgumentException.class, () -> new TarifaBase(-1));
     }
