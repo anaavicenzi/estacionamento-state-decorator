@@ -155,4 +155,13 @@ class PermanenciaTest {
         assertThrows(IllegalArgumentException.class, () -> TipoServico.de("ENCERAMENTO"));
         assertThrows(IllegalArgumentException.class, () -> TipoServico.de(null));
     }
+
+    @Test
+    void naoPodeLavarSeAVagaNaoEstaOcupada() {
+        Vaga vagaLivre = new Vaga(2L, 2);
+        Permanencia semOcupar = new Permanencia(2L, vagaLivre, new Veiculo("xyz9k87", "Uno"), ENTRADA);
+
+        assertThrows(RegraNegocioException.class,
+            () -> semOcupar.adicionarServico(TipoServico.LAVAGEM));
+      }
 }
