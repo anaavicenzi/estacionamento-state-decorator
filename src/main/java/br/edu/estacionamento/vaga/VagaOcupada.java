@@ -18,6 +18,11 @@ public class VagaOcupada implements EstadoVaga {
     }
 
     @Override
+    public EstadoVaga iniciarManutencao() {
+        throw new TransicaoInvalidaException("colocar em manutenção", nome());
+    }
+
+    @Override
     public String nome() {
         return "OCUPADA";
     }

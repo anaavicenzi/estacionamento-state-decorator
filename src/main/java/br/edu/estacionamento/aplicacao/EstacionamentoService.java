@@ -55,6 +55,12 @@ public class EstacionamentoService {
         return vaga;
     }
 
+    public synchronized Vaga colocarVagaEmManutencao(Long id) {
+        Vaga vaga = buscarVaga(id);
+        vaga.iniciarManutencao();
+        return vaga;
+    }
+
     /**
      * Libera manualmente uma vaga (uso previsto: cancelar uma reserva). Uma vaga
      * ocupada só é liberada pela saída da permanência, para não deixar uma

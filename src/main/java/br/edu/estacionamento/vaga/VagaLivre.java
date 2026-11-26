@@ -18,6 +18,11 @@ public class VagaLivre implements EstadoVaga {
     }
 
     @Override
+    public EstadoVaga iniciarManutencao() {
+        return new VagaManutencao();
+    }
+
+    @Override
     public String nome() {
         return "LIVRE";
     }

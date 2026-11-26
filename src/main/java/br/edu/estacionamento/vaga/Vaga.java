@@ -24,6 +24,10 @@ public class Vaga {
         estado = estado.reservar();
     }
 
+    public void iniciarManutencao() {
+        estado = estado.iniciarManutencao();
+    }
+
     public Long getId() {
         return id;
     }

@@ -41,6 +41,11 @@ public class VagaController {
         return VagaResponse.de(service.reservarVaga(id));
     }
 
+    @PostMapping("/{id}/manutencao")
+    public VagaResponse manutencao(@PathVariable Long id) {
+        return VagaResponse.de(service.colocarVagaEmManutencao(id));
+    }
+
     @PostMapping("/{id}/liberar")
     public VagaResponse liberar(@PathVariable Long id) {
         return VagaResponse.de(service.liberarVaga(id));
