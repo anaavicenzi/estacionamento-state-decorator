@@ -77,6 +77,22 @@ class ServicoDecoratorTest {
     }
 
     @Test
+    void comRecargaEletricaSomaValorDaRecarga() {
+        Servico servico = new RecargaEletrica(new TarifaBase(2));
+
+        assertEquals("Tarifa 2h + Recarga Elétrica", servico.descricao());
+        assertEquals(45.0, servico.custo(), DELTA);
+    }
+
+    @Test
+    void comVagaCobertaERecargaEletricaSomaTudo() {
+        Servico servico = new RecargaEletrica(new VagaCoberta(new TarifaBase(2)));
+
+        assertEquals("Tarifa 2h + Vaga Coberta + Recarga Elétrica", servico.descricao());
+        assertEquals(60.0, servico.custo(), DELTA);
+    }
+
+    @Test
     void tarifaBaseNaoAceitaHorasNegativas() {
         assertThrows(IllegalArgumentException.class, () -> new TarifaBase(-1));
     }
