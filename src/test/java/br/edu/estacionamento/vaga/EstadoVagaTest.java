@@ -55,4 +55,39 @@ class EstadoVagaTest {
     void vagaReservadaNaoPodeSerReservada() {
         assertThrows(TransicaoInvalidaException.class, () -> new VagaReservada().reservar());
     }
+
+    @Test
+    void vagaLivreDeveIniciarManutencao() {
+        assertInstanceOf(VagaManutencao.class, new VagaLivre().iniciarManutencao());
+    }
+
+    @Test
+    void vagaOcupadaNaoPodeIniciarManutencao() {
+        assertThrows(TransicaoInvalidaException.class, () -> new VagaOcupada().iniciarManutencao());
+    }
+
+    @Test
+    void vagaReservadaNaoPodeIniciarManutencao() {
+        assertThrows(TransicaoInvalidaException.class, () -> new VagaReservada().iniciarManutencao());
+    }
+
+    @Test
+    void vagaManutencaoNaoPodeSerOcupada() {
+        assertThrows(TransicaoInvalidaException.class, () -> new VagaManutencao().ocupar());
+    }
+
+    @Test
+    void vagaManutencaoNaoPodeSerReservada() {
+        assertThrows(TransicaoInvalidaException.class, () -> new VagaManutencao().reservar());
+    }
+
+    @Test
+    void vagaManutencaoNaoPodeIniciarManutencaoDeNovo() {
+        assertThrows(TransicaoInvalidaException.class, () -> new VagaManutencao().iniciarManutencao());
+    }
+
+    @Test
+    void vagaManutencaoDeveLiberar() {
+        assertInstanceOf(VagaLivre.class, new VagaManutencao().liberar());
+    }
 }

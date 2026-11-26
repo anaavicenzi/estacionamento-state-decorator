@@ -6,6 +6,8 @@ import java.util.function.UnaryOperator;
 import br.edu.estacionamento.servico.Lavagem;
 import br.edu.estacionamento.servico.Manobrista;
 import br.edu.estacionamento.servico.Servico;
+import br.edu.estacionamento.servico.VagaCoberta;
+import br.edu.estacionamento.servico.RecargaEletrica;
 
 /**
  * Serviços extras que podem ser adicionados a uma permanência. Cada tipo sabe
@@ -15,7 +17,9 @@ import br.edu.estacionamento.servico.Servico;
 public enum TipoServico {
 
     LAVAGEM(Lavagem::new),
-    MANOBRISTA(Manobrista::new);
+    MANOBRISTA(Manobrista::new),
+    VAGA_COBERTA(VagaCoberta::new),
+    RECARGA_ELETRICA(RecargaEletrica::new);
 
     private final UnaryOperator<Servico> decorador;
 

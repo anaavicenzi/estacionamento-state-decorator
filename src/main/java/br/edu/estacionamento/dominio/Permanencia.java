@@ -44,6 +44,9 @@ public class Permanencia {
         if (extras.contains(tipo)) {
             throw new RegraNegocioException("Serviço " + tipo + " já foi adicionado à permanência " + id);
         }
+        if (tipo == TipoServico.LAVAGEM && !vaga.getNomeEstado().equals("OCUPADA")) {
+            throw new RegraNegocioException("Só é possível lavar com o veículo estacionado");
+        }
         extras.add(tipo);
     }
 

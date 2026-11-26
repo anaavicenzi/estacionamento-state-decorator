@@ -266,3 +266,66 @@ soma a sua parte.
 | Octavio | [octaviodemos](https://github.com/octaviodemos) | Implementação do padrão Decorator (serviços extras Lavagem e Manobrista, tarifa base e testes) e seção Decorator do README. |
 | Lucas | [LucasMagenis](https://github.com/LucasMagenis) | Domínio (`Veiculo`, `Permanencia`), `EstacionamentoService`, repositórios em memória, API REST (controllers, DTOs, tratamento de erros → HTTP 409), testes e seção "Exemplos de uso" do README. |
 | Bruno | [BrunoSupriano](https://github.com/BrunoSupriano) | Frontend (`index.html`, `app.js`, `style.css`): planta do pátio com estados coloridos, entrada, reservar/liberar, serviços extras, saída com confirmação e recibo, lista de permanências com filtros, tratamento de erros da API (409/404/400 e servidor fora do ar) e dados mockados. Integração do frontend com a API, teste de ponta a ponta do fluxo de demonstração.|
+
+## Descrição da extensão (Parte 2 do trabalho)
+
+**Seguindo os padrões do projeto, essas foram as contribuições:**
+
+**State:** Novo estado `VagaManutencao`: Só uma vaga livre pode entrar em manutenção. Nesse estado ela não pode ser ocupada nem reservada, e `liberar` encerra a manutenção.
+Endpoit novo: `POST /api/vagas/{id}/manutencao`,
+
+```mermaid
+stateDiagram-v2
+  [*] --> Livre
+
+  LIVRE --> OCUPADA: ocupar
+  LIVRE --> RESERVADA: reservar
+  LIVRE --> MANUTENCAO: iniciarManutencao
+
+  OCUPADA --> LIVRE: liberar
+
+  RESERVADA --> OCUPADA: ocupar
+  RESERVADA --> LIVRE: liberar
+
+  MANUTENCAO --> LIVRE: liberar
+```
+
+**Decorator:** dois serviços novos, sem alterar os decorators existentes:
+
+| Classe | Tipo na API | Valor |
+| --- | --- | --- |
+| `VagaCoberta` | `VAGA_COBERTA` | R$ 15,00 |
+| `RecargaEletrica` | `RECARGA_ELETRICA` | R$ 25,00 |
+
+**Integração entre os patterns:** a lavagem só pode ser adicionada se a vaga da permanência estiver no estado `OCUPADA`.
+
+### Como testar
+
+Testes automatizados:
+
+```bash
+mvn clean verify
+```
+
+Teste manual: inicie com `mvn spring-boot:run` e depois com a aplicação iniciada, rode em outro terminal Bash:
+
+```bash
+curl -X POST http://localhost:8080/api/vagas -H "Content-Type: application/json" -d '{"numero": 1}'
+curl -X POST http://localhost:8080/api/vagas/1/manutencao
+curl -i -X POST http://localhost:8080/api/vagas/1/reservar   # retorna 409
+curl -X POST http://localhost:8080/api/vagas/1/liberar
+curl -X POST http://localhost:8080/api/permanencias -H "Content-Type: application/json" -d '{"placa": "ABC1D23",
+"modelo": "Gol", "vagaId": 1}'
+curl -X POST http://localhost:8080/api/permanencias/1/servicos -H "Content-Type: application/json" -d '{"tipo":
+"VAGA_COBERTA"}'
+curl -X POST http://localhost:8080/api/permanencias/1/servicos -H "Content-Type: application/json" -d '{"tipo":
+"RECARGA_ELETRICA"}'
+curl -X POST http://localhost:8080/api/permanencias/1/servicos -H "Content-Type: application/json" -d '{"tipo":
+"LAVAGEM"}'
+```
+
+## Equipe da extensão (Parte 2 do trabalho)
+
+| Integrante | GitHub | Contribuição |
+| --- | --- | --- |
+| Lucas Hoffmann | [lucascholzeh](https://github.com/lucascholzeh) | Estado `VagaManutencao`, decorators `VagaCoberta` e `RecargaEletrica`, regra de lavagem (somente se o veículo estiver estacionado), testes e documentação. |

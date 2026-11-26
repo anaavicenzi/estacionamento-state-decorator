@@ -8,5 +8,7 @@ public interface EstadoVaga {
 
     EstadoVaga reservar();
 
+    EstadoVaga iniciarManutencao();
+
     String nome();
 }
