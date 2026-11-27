@@ -2,7 +2,19 @@
 
 ## Descrição do sistema
 
-(a preencher)
+Sistema web de gerenciamento de estacionamento, desenvolvido para aplicar os
+padrões de projeto State e Decorator. Ele permite cadastrar, reservar e liberar
+vagas, registrar a entrada e a saída de veículos e adicionar serviços extras
+(lavagem e manobrista) a cada permanência.
+
+Cada vaga pode estar livre, reservada ou ocupada, e o padrão **State** controla
+quais operações são permitidas em cada estado. A cobrança parte de uma tarifa
+base de R$ 10,00 por hora, à qual o padrão **Decorator** acrescenta o valor dos
+serviços contratados. Na saída, o sistema calcula o total e libera a vaga.
+
+A aplicação é composta por uma API REST em Java com Spring Boot e um frontend em
+HTML, CSS e JavaScript. Os dados são mantidos em memória e se perdem quando a
+aplicação é reiniciada.
 
 ## Tecnologias e pré-requisitos
 
