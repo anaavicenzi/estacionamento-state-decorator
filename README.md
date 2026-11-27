@@ -249,6 +249,39 @@ Cada chamada percorre a cadeia de fora para dentro: `Manobrista` pede a
 descrição/custo à `Lavagem`, que pede à `TarifaBase`; na volta, cada camada
 soma a sua parte.
 
+## Fluxo integrado da aplicacao
+
+O diagrama abaixo serve como roteiro para a demonstracao: ele mostra a entrada
+do veiculo, as transicoes de estado da vaga (State), a inclusao dos extras
+(Decorator) e a saida com o calculo final.
+
+```mermaid
+flowchart TD
+    A[Usuario: seleciona uma vaga livre ou reservada] --> B[POST /api/permanencias]
+    B --> C[EstacionamentoService.registrarEntrada]
+    C --> D{Vaga pode ser ocupada?}
+    D -- Nao --> E[Erro 409: transicao invalida]
+    D -- Sim --> F[State: vaga.ocupar]
+    F --> G[VagaLivre ou VagaReservada]
+    G --> H[VagaOcupada]
+    H --> I[Cria Permanencia: veiculo, vaga e hora de entrada]
+
+    I --> J{Cliente adiciona extra?}
+    J -- Lavagem --> K[Decorator: Lavagem cadeia]
+    J -- Manobrista --> L[Decorator: Manobrista cadeia]
+    K --> M[Servico composto]
+    L --> M
+    J -- Nao / continuar --> N[Valor parcial: TarifaBase por horas + extras]
+    M --> N
+
+    N --> O[POST /api/permanencias/id/saida]
+    O --> P[EstacionamentoService.registrarSaida]
+    P --> Q[Fecha a cadeia Decorator e calcula valor total]
+    Q --> R[State: vaga.liberar]
+    R --> S[VagaLivre]
+    S --> T[Retorna recibo: descricao e valor total]
+```
+
 ## Declaração de uso de IA
 
 | Parte | Modelo | Onde foi utilizada |
